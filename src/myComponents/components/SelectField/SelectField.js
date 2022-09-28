@@ -23,7 +23,7 @@ function SelectField({ label, name, options, ...rest }) {
         placeholder="First Name"
       >
         {options.map((option) => (
-          <option>{option}</option>
+          <option key={option}>{option}</option>
         ))}
         {/* <NativeSelect
           inputProps={{

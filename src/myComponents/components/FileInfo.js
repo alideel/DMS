@@ -78,11 +78,11 @@ function FileInfo({ formData }) {
       </Grid>
       <Grid item lg={6}>
         <FormField
+          id="incoming-number"
           type={incomingNumber.type}
           label={incomingNumber.label}
           name={incomingNumber.name}
           value={incomingNumberV}
-          placeholder={incomingNumber.placeholder}
           error={errors.incomingNumber && touched.incomingNumber}
           success={incomingNumberV.length > 0 && !errors.incomingNumber}
           fullWidth

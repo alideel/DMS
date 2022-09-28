@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.1.0
@@ -35,16 +36,25 @@ import MDAvatar from "components/MDAvatar";
 import breakpoints from "assets/theme/base/breakpoints";
 
 // Images
-import burceMars from "assets/images/bruce-mars.jpg";
+// import burceMars from "assets/images/bruce-mars.jpg";
 import backgroundImage from "assets/images/bg-profile.jpeg";
 
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
+import useAuth from "../../../../hooks/useAuth";
+
+const BASEURL = "http://dms.somee.com/";
+
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   // const [tabValue, setTabValue] = useState(0);
+  const { auth } = useAuth();
+
+  const profileImage = BASEURL + auth?.profile?.profileImage;
+  const name = `${auth?.profile?.firstName} ${auth?.profile?.secondeName} ${auth?.profile?.thirdName}`;
+  const department = auth?.profile?.department;
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -114,7 +124,7 @@ function Header({ children }) {
                 aria-haspopup="true"
                 onClick={handleClick}
               >
-                <MDAvatar src={burceMars} alt="profile-image" size="xl" shadow="sm" />
+                <MDAvatar src={profileImage} alt="profile-image" size="xl" shadow="sm" />
               </IconButton>
               <Menu
                 id="basic-menu"
@@ -137,10 +147,10 @@ function Header({ children }) {
           <Grid item>
             <MDBox height="100%" mt={0.5} lineHeight={1}>
               <MDTypography variant="h5" fontWeight="medium">
-                علي حامد جاسم
+                {name}
               </MDTypography>
               <MDTypography variant="button" color="text" fontWeight="regular">
-                قسم المطورين
+                {department}
               </MDTypography>
             </MDBox>
           </Grid>

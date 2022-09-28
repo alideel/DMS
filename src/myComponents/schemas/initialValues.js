@@ -12,6 +12,7 @@ const {
     description,
     receivingMechanism,
     department,
+    secret,
   },
 } = form;
 
@@ -28,6 +29,7 @@ const initialValues = {
   [description.name]: "",
   [receivingMechanism.name]: "",
   [department.name]: "",
+  [secret.name]: true,
 };
 
 export default initialValues;

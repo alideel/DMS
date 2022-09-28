@@ -68,6 +68,12 @@ const form = {
       type: "text",
       errorMsg: null,
     },
+    secret: {
+      name: "secret",
+      label: "سري",
+      type: "boolean",
+      errorMsg: null,
+    },
   },
 };
 

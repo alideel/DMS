@@ -11,6 +11,7 @@ const {
     receivingMechanism,
     recivefrom,
     department,
+    secret,
   },
 } = form;
 
@@ -26,6 +27,7 @@ const validations = [
     [receivingMechanism.name]: Yup.string(),
     [recivefrom.name]: Yup.string(),
     [department.name]: Yup.string(),
+    [secret.name]: Yup.boolean(),
     //  [repeatPassword.name]: Yup.string()
     //   .required(repeatPassword.errorMsg)
     //    .oneOf([Yup.ref("password"), null], repeatPassword.invalidMsg),

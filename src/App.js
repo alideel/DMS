@@ -61,8 +61,8 @@ import RequireAuth from "./RequireAuth";
 
 export default function App() {
   const ROLES = {
-    User: 2001,
-    Editor: 1984,
+    User: "Owner",
+    Owner: 6789,
     Admin: 5150,
   };
   const [controller, dispatch] = useMaterialUIController();

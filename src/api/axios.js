@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // const BASE_URL = "https://douha.pythonanywhere.com/api";
-const BASE_URL = "http://192.168.21.91/api";
+const BASE_URL = "http://dms.somee.com/api";
 
 export default axios.create({
   baseURL: BASE_URL,

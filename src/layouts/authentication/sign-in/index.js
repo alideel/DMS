@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable spaced-comment */
 /* eslint-disable no-console */
 /**
@@ -40,11 +41,14 @@ import MDButton from "components/MDButton";
 // Authentication layout components
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 
+import jwt_decode from "jwt-decode";
+
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import axios from "../../../api/axios";
+
 import useAuth from "../../../hooks/useAuth";
 
 // const LOGIN_URL = "/auth/signin";
@@ -59,7 +63,7 @@ function Basic() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/dashboard";
 
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -71,18 +75,23 @@ function Basic() {
         headers: {
           "Content-Type": "application/json",
           Accept: "*/*",
+          "Access-Control-Allow-Origin": "*",
         },
         withCredentials: true,
       });
-      console.log(JSON.stringify(response?.data));
 
       //console.log(JSON.stringify(response));
 
-      const accessToken = response?.data?.accessToken;
-      const roles = response?.data?.roles;
+      const accessToken = response?.data;
+      console.log(accessToken);
+      const data = jwt_decode(accessToken);
+      console.log(data);
+      const roles = [];
+      roles.push(data.Role);
       setAuth({ email, pwd, roles, accessToken });
       setEmail("");
       setPwd("");
+
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
