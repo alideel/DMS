@@ -80,14 +80,15 @@ function ProfileInfoCard({ shadow }) {
     const FirstName = values[2];
     const SecondName = values[3];
     const ThirdName = values[4];
-    const ImageFile = "";
     const formData = new FormData();
     formData.append("FirstName", FirstName);
     formData.append("SecondName", SecondName);
     formData.append("ThirdName", ThirdName);
     formData.append("ImageFile", file);
     try {
-      await axiosPrivate.post("/Profile", formData);
+      const response = await axiosPrivate.post("/Profile", formData);
+      console.log(response.data);
+      setAuth({ ...auth, profile: response.data });
     } catch (err) {
       console.log(err);
       setErrMsg("Change Failed");
@@ -143,28 +144,24 @@ function ProfileInfoCard({ shadow }) {
   const renderItemsEdit = labels.map((label, key) => (
     <React.Fragment key={label}>
       <Grid item xs={6}>
-        <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-          <MDInput
-            id="department-name"
-            label={label}
-            fullWidth
-            variant="standard"
-            value={values[key]}
-            onChange={(e) => {
-              const newValue = [...values.slice(0, key), e.target.value, ...values.slice(key + 1)];
-              setValues(newValue);
-            }}
-          />
-        </MDTypography>
+        <MDInput
+          id="department-name"
+          label={label}
+          fullWidth
+          variant="standard"
+          value={values[key]}
+          onChange={(e) => {
+            const newValue = [...values.slice(0, key), e.target.value, ...values.slice(key + 1)];
+            setValues(newValue);
+          }}
+        />
       </Grid>
       {key == values.length - 1 && (
         <Grid item xs={6}>
-          <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-            <MDButton variant="outlined" color="info" component="label">
-              تغيير الصورة الشخصية
-              <input type="file" hidden onChange={(e) => setFile(e.target.files[0])} value={""} />
-            </MDButton>
-          </MDTypography>
+          <MDButton variant="outlined" color="info" component="label">
+            تغيير الصورة الشخصية
+            <input type="file" hidden onChange={(e) => setFile(e.target.files[0])} value={""} />
+          </MDButton>
         </Grid>
       )}
     </React.Fragment>
@@ -189,7 +186,7 @@ function ProfileInfoCard({ shadow }) {
   // ));
 
   return (
-    <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
+    <>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -200,11 +197,11 @@ function ProfileInfoCard({ shadow }) {
       >
         <DialogTitle id="alert-dialog-title">تغيير معلومات الحساب الشخصي</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description" sx={{ marginTop: 2 }}>
-            <Grid container rowSpacing={4} columnSpacing={4}>
-              {renderItemsEdit}
-            </Grid>
-          </DialogContentText>
+          {/* <DialogContentText id="alert-dialog-description" sx={{ marginTop: 2 }}> */}
+          <Grid container rowSpacing={4} columnSpacing={4}>
+            {renderItemsEdit}
+          </Grid>
+          {/* </DialogContentText> */}
           {errMsg}
         </DialogContent>
         <DialogActions>
@@ -216,7 +213,8 @@ function ProfileInfoCard({ shadow }) {
           </MDButton>
         </DialogActions>
       </Dialog>
-      {/* <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
+      <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
+        {/* <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
         <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
           {title}
         </MDTypography>
@@ -226,25 +224,31 @@ function ProfileInfoCard({ shadow }) {
           </Tooltip>
         </MDTypography>
       </MDBox> */}
-      <MDBox px={2}>
-        {/* <MDBox mb={2} lineHeight={1}>
+        <MDBox px={2}>
+          {/* <MDBox mb={2} lineHeight={1}>
           <MDTypography variant="button" color="text" fontWeight="light">
             {description}
           </MDTypography>
         </MDBox> */}
-        {renderItems}
-        <MDBox>
-          <MDButton variant="gradient" color="info" sx={{ marginTop: 4 }} onClick={handleClickOpen}>
-            تغيير المعلومات
-          </MDButton>
-          {/* <MDBox display="flex" py={1} pr={2}>
+          {renderItems}
+          <MDBox>
+            <MDButton
+              variant="gradient"
+              color="info"
+              sx={{ marginTop: 4 }}
+              onClick={handleClickOpen}
+            >
+              تغيير المعلومات
+            </MDButton>
+            {/* <MDBox display="flex" py={1} pr={2}>
             <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
               social: &nbsp;
             </MDTypography>
           </MDBox> */}
+          </MDBox>
         </MDBox>
-      </MDBox>
-    </Card>
+      </Card>
+    </>
   );
 }
 

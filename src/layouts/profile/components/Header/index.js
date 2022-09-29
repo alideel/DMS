@@ -51,10 +51,18 @@ function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   // const [tabValue, setTabValue] = useState(0);
   const { auth } = useAuth();
-
-  const profileImage = BASEURL + auth?.profile?.profileImage;
-  const name = `${auth?.profile?.firstName} ${auth?.profile?.secondeName} ${auth?.profile?.thirdName}`;
-  const department = auth?.profile?.department;
+  const [profileImage, setProfileImage] = useState(null);
+  const [name, setName] = useState(null);
+  const [department, setDepartment] = useState(null);
+  console.log(profileImage);
+  useEffect(() => {
+    console.log("ss");
+    setProfileImage(BASEURL + auth?.profile?.profileImage);
+    setName(
+      `${auth?.profile?.firstName} ${auth?.profile?.secondeName} ${auth?.profile?.thirdName}`
+    );
+    setDepartment(auth?.profile?.department);
+  }, [auth.profile]);
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
