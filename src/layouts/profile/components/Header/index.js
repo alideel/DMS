@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-debugger */
 /* eslint-disable no-unsafe-optional-chaining */
 /**
 =========================================================
@@ -42,7 +44,7 @@ import backgroundImage from "assets/images/bg-profile.jpeg";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
+import useAxiosPrivate from "../../../../hooks/useAxiosPrivate";
 import useAuth from "../../../../hooks/useAuth";
 
 const BASEURL = "http://dms.somee.com/";
@@ -50,19 +52,32 @@ const BASEURL = "http://dms.somee.com/";
 function Header({ children }) {
   const [tabsOrientation, setTabsOrientation] = useState("horizontal");
   // const [tabValue, setTabValue] = useState(0);
-  const { auth } = useAuth();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth, setAuth } = useAuth();
   const [profileImage, setProfileImage] = useState(null);
   const [name, setName] = useState(null);
   const [department, setDepartment] = useState(null);
-  console.log(profileImage);
+
+  useEffect(async () => {
+    const getUserInfo = async () => {
+      try {
+        const response = await axiosPrivate.get("/Profile", {});
+        setAuth({ ...auth, profile: response.data });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    await getUserInfo();
+  }, []);
+
   useEffect(() => {
-    console.log("ss");
     setProfileImage(BASEURL + auth?.profile?.profileImage);
     setName(
       `${auth?.profile?.firstName} ${auth?.profile?.secondeName} ${auth?.profile?.thirdName}`
     );
     setDepartment(auth?.profile?.department);
-  }, [auth.profile]);
+  }, [auth]);
 
   useEffect(() => {
     // A function that sets the orientation state of the tabs.
@@ -114,87 +129,59 @@ function Header({ children }) {
           overflow: "hidden",
         }}
       />
-      <Card
-        sx={{
-          position: "relative",
-          mt: -8,
-          mx: 3,
-          py: 2,
-          px: 2,
-        }}
-      >
-        <Grid container spacing={1} alignItems="center">
-          <Grid item>
-            <MDBox>
-              <IconButton
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-              >
-                <MDAvatar src={profileImage} alt="profile-image" size="xl" shadow="sm" />
-              </IconButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem onClick={handleClose}>
-                  تغيير الصورة
-                  <input hidden accept="image/*" type="file" />
-                </MenuItem>
-                <MenuItem onClick={handleClose}>أضافة معلومات</MenuItem>
-                <MenuItem onClick={handleClose}>تسجيل الخروج</MenuItem>
-              </Menu>
-            </MDBox>
+      {auth.profile && (
+        <Card
+          sx={{
+            position: "relative",
+            mt: -8,
+            mx: 3,
+            py: 2,
+            px: 2,
+          }}
+        >
+          <Grid container spacing={1} alignItems="center">
+            <Grid item>
+              <MDBox>
+                <IconButton
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  onClick={handleClick}
+                >
+                  <MDAvatar src={profileImage} alt="profile-image" size="xl" shadow="sm" />
+                </IconButton>
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={open}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem onClick={handleClose}>
+                    تغيير الصورة
+                    <input hidden accept="image/*" type="file" />
+                  </MenuItem>
+                  <MenuItem onClick={handleClose}>أضافة معلومات</MenuItem>
+                  <MenuItem onClick={handleClose}>تسجيل الخروج</MenuItem>
+                </Menu>
+              </MDBox>
+            </Grid>
+            <Grid item>
+              <MDBox height="100%" mt={0.5} lineHeight={1}>
+                <MDTypography variant="h5" fontWeight="medium">
+                  {name}
+                </MDTypography>
+                <MDTypography variant="button" color="text" fontWeight="regular">
+                  {department}
+                </MDTypography>
+              </MDBox>
+            </Grid>
           </Grid>
-          <Grid item>
-            <MDBox height="100%" mt={0.5} lineHeight={1}>
-              <MDTypography variant="h5" fontWeight="medium">
-                {name}
-              </MDTypography>
-              <MDTypography variant="button" color="text" fontWeight="regular">
-                {department}
-              </MDTypography>
-            </MDBox>
-          </Grid>
-          {/* <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
-            <AppBar position="static">
-              <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
-                <Tab
-                  label="App"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      home
-                    </Icon>
-                  }
-                />
-                <Tab
-                  label="Message"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      email
-                    </Icon>
-                  }
-                />
-                <Tab
-                  label="Settings"
-                  icon={
-                    <Icon fontSize="small" sx={{ mt: -0.25 }}>
-                      settings
-                    </Icon>
-                  }
-                />
-              </Tabs>
-            </AppBar>
-          </Grid> */}
-        </Grid>
-        {children}
-      </Card>
+          {children}
+        </Card>
+      )}
     </MDBox>
   );
 }

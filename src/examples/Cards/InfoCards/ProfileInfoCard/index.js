@@ -31,7 +31,6 @@ import PropTypes from "prop-types";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 // @mui material components
 import Card from "@mui/material/Card";
@@ -44,7 +43,6 @@ import Grid from "@mui/material/Grid";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDButton from "components/MDButton";
-import Button from "@mui/material/Button";
 // Material Dashboard 2 React base styles
 // import colors from "assets/theme/base/colors";
 // import typography from "assets/theme/base/typography";
@@ -87,13 +85,14 @@ function ProfileInfoCard({ shadow }) {
     formData.append("ImageFile", file);
     try {
       const response = await axiosPrivate.post("/Profile", formData);
-      console.log(response.data);
+      // console.log(response.data);
       setAuth({ ...auth, profile: response.data });
     } catch (err) {
       console.log(err);
       setErrMsg("Change Failed");
     }
   };
+
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
@@ -103,7 +102,7 @@ function ProfileInfoCard({ shadow }) {
         const response = await axiosPrivate.get("/Profile", {
           signal: controller.signal,
         });
-
+        // console.log(response.data);
         isMounted &&
           setValues([
             response.data.department,
@@ -112,6 +111,7 @@ function ProfileInfoCard({ shadow }) {
             response.data.secondeName,
             response.data.thirdName,
           ]);
+
         setAuth({ ...auth, profile: response.data });
       } catch (err) {
         console.error(err);
@@ -167,24 +167,6 @@ function ProfileInfoCard({ shadow }) {
     </React.Fragment>
   ));
 
-  // Render the card social media icons
-  // const renderSocial = social.map(({ link, icon, color }) => (
-  //   <MDBox
-  //     key={color}
-  //     component="a"
-  //     href={link}
-  //     target="_blank"
-  //     rel="noreferrer"
-  //     fontSize={size.lg}
-  //     color={socialMediaColors[color].main}
-  //     pr={1}
-  //     pl={0.5}
-  //     lineHeight={1}
-  //   >
-  //     {icon}
-  //   </MDBox>
-  // ));
-
   return (
     <>
       <Dialog
@@ -197,11 +179,10 @@ function ProfileInfoCard({ shadow }) {
       >
         <DialogTitle id="alert-dialog-title">تغيير معلومات الحساب الشخصي</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText id="alert-dialog-description" sx={{ marginTop: 2 }}> */}
           <Grid container rowSpacing={4} columnSpacing={4}>
             {renderItemsEdit}
           </Grid>
-          {/* </DialogContentText> */}
+
           {errMsg}
         </DialogContent>
         <DialogActions>
@@ -213,41 +194,23 @@ function ProfileInfoCard({ shadow }) {
           </MDButton>
         </DialogActions>
       </Dialog>
-      <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
-        {/* <MDBox display="flex" justifyContent="space-between" alignItems="center" pt={2} px={2}>
-        <MDTypography variant="h6" fontWeight="medium" textTransform="capitalize">
-          {title}
-        </MDTypography>
-        <MDTypography component={Link} to={action.route} variant="body2" color="secondary">
-          <Tooltip title={action.tooltip} placement="top">
-            <Icon>edit</Icon>
-          </Tooltip>
-        </MDTypography>
-      </MDBox> */}
-        <MDBox px={2}>
-          {/* <MDBox mb={2} lineHeight={1}>
-          <MDTypography variant="button" color="text" fontWeight="light">
-            {description}
-          </MDTypography>
-        </MDBox> */}
-          {renderItems}
-          <MDBox>
-            <MDButton
-              variant="gradient"
-              color="info"
-              sx={{ marginTop: 4 }}
-              onClick={handleClickOpen}
-            >
-              تغيير المعلومات
-            </MDButton>
-            {/* <MDBox display="flex" py={1} pr={2}>
-            <MDTypography variant="button" fontWeight="bold" textTransform="capitalize">
-              social: &nbsp;
-            </MDTypography>
-          </MDBox> */}
+      {values && (
+        <Card sx={{ height: "100%", boxShadow: !shadow && "none" }}>
+          <MDBox px={2}>
+            {renderItems}
+            <MDBox>
+              <MDButton
+                variant="gradient"
+                color="info"
+                sx={{ marginTop: 4 }}
+                onClick={handleClickOpen}
+              >
+                تغيير المعلومات
+              </MDButton>
+            </MDBox>
           </MDBox>
-        </MDBox>
-      </Card>
+        </Card>
+      )}
     </>
   );
 }

@@ -85,15 +85,17 @@ function Basic() {
       const accessToken = response?.data;
       console.log(accessToken);
       const data = jwt_decode(accessToken);
-      console.log(data);
+      // console.log(data);
       const roles = [];
       roles.push(data.Role);
       setAuth({ email, pwd, roles, accessToken });
+
       setEmail("");
       setPwd("");
 
       navigate(from, { replace: true });
     } catch (err) {
+      console.log(err);
       if (!err?.response) {
         setErrMsg("No Server Response");
       } else if (err.response?.status === 400) {

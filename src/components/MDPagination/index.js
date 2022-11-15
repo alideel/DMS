@@ -70,6 +70,7 @@ MDPagination.defaultProps = {
   color: "info",
   size: "medium",
   active: false,
+  children: "",
 };
 
 // Typechecking props for the MDPagination
@@ -89,7 +90,7 @@ MDPagination.propTypes = {
   ]),
   size: PropTypes.oneOf(["small", "medium", "large"]),
   active: PropTypes.bool,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
 };
 
 export default MDPagination;

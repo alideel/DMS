@@ -28,7 +28,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 
 // Data
-import departmentTableData from "layouts/addDepartment/data/authorsTableData";
+import departmentTableData from "layouts/addDepartment/data/departmentTableData";
 // import projectsTableData from "layouts/addDepartment/data/projectsTableData";
 
 import MDInput from "components/MDInput";
@@ -46,7 +46,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import MDButton from "components/MDButton";
 
 function AddDepartment() {
-  const { columns, rows } = departmentTableData();
+  const { columns, rows, editDialog } = departmentTableData();
   // const { columns: pColumns, rows: pRows } = projectsTableData();
   // const [value, setValue] = useState(new Date("2014-08-18T21:11:54"));
 
@@ -95,6 +95,7 @@ function AddDepartment() {
               </Paper>
             </Grid>
             <Grid item xs={12}>
+              {editDialog}
               <Card>
                 <MDBox
                   mx={2}
